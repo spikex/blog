@@ -7,12 +7,9 @@ class PostsControllerTest < ActionController::TestCase
 
   context 'on GET to index' do
     setup do
-      @post1 = Post.create({:title => "Post 1",
-                            :body => "Body 1",
-                            :created_at => 10.minutes.ago})
-      @post2 = Post.create({:title => "Post 2",
-                            :body => "Body 2",
-                            :created_at => 5.minutes.ago})
+      @post1 = Factory(:published_post,:created_at => 10.minutes.ago)
+      @post2 = Factory(:published_post,:created_at => 5.minutes.ago)
+      @post3 = Factory(:post,:created_at => 5.minutes.ago)
       get :index
     end
 
@@ -30,12 +27,15 @@ class PostsControllerTest < ActionController::TestCase
       assert_select 'p', :text => /The time is now/
     end
 
-    # should_assign_to :posts, :equals => '[@post2, @post1]'
     should "sort the posts, most recent first, and assign to @posts" do
       reverse_sorted_posts = [@post2, @post1]
       assert_equal reverse_sorted_posts, assigns(:posts)
     end
 
+    should "show only published posts" do
+      assigns(:posts).each { |post| post.published? }
+    end
+    
     should "render the posts" do
       assigns(:posts).each do |post|
         assert_select 'h2>a[href=?]', post_path(post), :text => post.title
@@ -51,9 +51,9 @@ class PostsControllerTest < ActionController::TestCase
 
   context "on GET to show for a published post" do
     setup do
-      @post = Post.create({:title => 'Title', :body => 'Body', :published => true})
-      @comment = @post.comments.create({:title => 'Comment Title',
-                                        :body  => 'Comment Body'})
+      @post = Factory(:post,:title => 'Title', :body => 'Body', :published => true)
+      @comment = Factory(:comment,:post => @post, :title => 'Comment Title',
+                                        :body  => 'Comment Body')
       get :show, :id => @post
     end
 
@@ -82,7 +82,7 @@ class PostsControllerTest < ActionController::TestCase
 
   context "on GET to show for an unpublished post" do
     setup do
-      @post = Post.create({:title => 'Title', :body => 'Body', :published => false})
+      @post = Factory(:post, :published => false)
       get :show, :id => @post
     end
 
@@ -173,7 +173,7 @@ class PostsControllerTest < ActionController::TestCase
 
   context 'on PUT to update with valid parameters' do
     setup do
-      @post = Post.create({:title => "Title", :body => "Body"})
+      @post = Factory(:post,:title => "Title", :body => "Body")
       @new_post_attributes = { :title => "New Title", :body => "New Body" }
       put :update, :id => @post, :post => @new_post_attributes
     end
@@ -189,7 +189,7 @@ class PostsControllerTest < ActionController::TestCase
 
   context 'on PUT to update with invalid parameters' do
     setup do
-      @post = Post.create({:title => "Title", :body => "Body"})
+      @post = Factory(:post,:title => "Title", :body => "Body")
       put :update, :id => @post, :post => {:title => nil, :body => nil}
     end
 
