@@ -78,6 +78,12 @@ class PostsControllerTest < ActionController::TestCase
       assert_select 'h3', 'Comment Title'
       assert_select 'p', 'Comment Body'
     end
+    
+    should "display title" do
+      assert_select 'title', @post.title
+      assert_select 'h1', @post.title
+    end
+  
   end
 
   context "on GET to show for a published post with comments" do
