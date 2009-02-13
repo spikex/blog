@@ -2,6 +2,9 @@
 <% @post.comments.each do |comment| %>
   <h3><%=h comment.title %></h3>
   <p><%=h comment.body %></p>
+  <% form_for([@post,comment],{ :html => { :method => :delete}}) do |form|%>
+  <%= form.submit "Delete this comment" %>
+  <% end %>
 <% end %>
 <%= render :partial => 'comments/form',
            :locals  => { :post => @post, :comment => @comment } %>

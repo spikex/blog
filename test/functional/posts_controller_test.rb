@@ -80,6 +80,26 @@ class PostsControllerTest < ActionController::TestCase
     end
   end
 
+  context "on GET to show for a published post with comments" do
+    setup do
+      @post = Factory(:post,:title => 'Title', :body => 'Body', :published => true)
+      @comment = Factory(:comment,:post => @post, :title => 'Comment Title',
+                                        :body  => 'Comment Body')
+      get :show, :id => @post
+    end
+
+    should_respond_with :success
+    should_render_template :show
+    should_assign_to :comment
+    
+    should "have a form to post a comment" do
+      assert_select 'form[action=?][method=post]', post_comment_path(@post,@comment) do
+        assert_select 'input[type=hidden][name=_method][value=delete]'
+        assert_select 'input[type=submit]'
+      end
+    end
+  end
+
   context "on GET to show for an unpublished post" do
     setup do
       @post = Factory(:post, :published => false)
