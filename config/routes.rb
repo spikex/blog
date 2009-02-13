@@ -25,5 +25,8 @@ ActionController::Routing::Routes.draw do |map|
   #   m.login  '/login',  :action => 'new'
   #   m.logout '/logout', :action => 'destroy'
   # end
+  
+  map.resources :posts, :has_many => :comments
+  map.connect "posts", :controller => "blog", :action => "index"
 
 end
