@@ -1,0 +1,7 @@
+<%= render :partial => 'post', :locals => { :post => @post } %>
+<% @post.comments.each do |comment| %>
+  <h3><%=h comment.title %></h3>
+  <p><%=h comment.body %></p>
+<% end %>
+<%= render :partial => 'comments/form',
+           :locals  => { :post => @post, :comment => @comment } %>

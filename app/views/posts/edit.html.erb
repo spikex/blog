@@ -1,0 +1,7 @@
+<% form_for @post do |form| %>
+  <%= render :partial => 'form', :locals => { :form => form } %>
+  <div class="submit">
+    <%= form.submit 'Update Post' %>
+  </div>
+<% end %>
+

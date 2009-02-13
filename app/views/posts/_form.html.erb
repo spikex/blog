@@ -1,0 +1,17 @@
+<%= error_messages_for :post %>
+<div class="text_field">
+  <%= form.label :title %>
+  <%= form.text_field :title %>
+</div>
+<div class="text_field">
+  <%= form.label :author %>
+  <%= form.text_field :author %>
+</div>
+<div class="textarea_field">
+  <%= form.label :body %>
+  <%= form.text_area :body %>
+</div>
+<div class="text_field">
+  <%= form.label :published %>
+  <%= form.check_box :published %>
+</div>

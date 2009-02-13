@@ -1,0 +1,7 @@
+Hello from the index.html.erb template
+
+<p>The time is now <%= Time.now %>.</p>
+
+<%= render :partial => 'post', :collection => @posts %>
+
+<%= link_to 'Create a new post', new_post_path %>
