@@ -1,4 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :users, :has_one => [:password, :confirmation]
+  map.resource :session
+  map.resources :passwords
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   map.resources :products
@@ -29,4 +32,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :posts, :has_many => :comments
   map.connect "posts", :controller => "blog", :action => "index"
 
+  map.root :controller => "posts", :action => "index"
+  
 end

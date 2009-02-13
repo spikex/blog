@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Clearance::App::Controllers::ApplicationController
 
   helper :all
 
