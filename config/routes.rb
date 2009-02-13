@@ -32,6 +32,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :posts, :has_many => :comments
   map.connect "posts", :controller => "blog", :action => "index"
 
+    map.namespace :admin do |admin|
+      admin.resources :posts
+    end
+  
   map.root :controller => "posts", :action => "index"
   
 end

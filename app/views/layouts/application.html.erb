@@ -12,8 +12,12 @@
     <h1><%= yield :title %></h1>
 
     <div class="navigation">
-      <%= link_to_unless_current 'Home', posts_path %> |
-      <%= link_to_unless_current 'New Post', new_post_path %>
+      <%= link_to_unless_current 'Home', posts_path %>
+      <% if signed_in? %>
+        <%= link_to_unless_current 'New Post', new_admin_post_path %>
+      <% else %>
+        <%= link_to 'Login', new_session_path %>
+      <% end %>
     </div>
 
     <%= render :partial => 'layouts/flashes' -%>
