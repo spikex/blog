@@ -2,7 +2,11 @@ class PostsController < ApplicationController
   before_filter :ensure_published, :only => 'show'
 
   def index
-    @posts = Post.all(:order => 'created_at desc', :conditions => ['published = ?', true])
+    @posts = Post.latest
+    respond_to do |format|
+      format.html
+      format.atom
+    end
   end
 
   def show

@@ -2,6 +2,7 @@ require 'test_helper'
 
 class PostsControllerTest < ActionController::TestCase
   should_route :get, '/posts', :action => :index
+  should_route :get, '/posts.atom', :action => :index, :format => 'atom'
 
   include PostsHelper
 
@@ -48,6 +49,27 @@ class PostsControllerTest < ActionController::TestCase
     end
   end
 
+  context 'on GET to index.atom' do
+    setup do
+      @post1 = Factory(:published_post,:created_at => 10.minutes.ago)
+      @post2 = Factory(:published_post,:created_at => 5.minutes.ago)
+      @post3 = Factory(:post,:created_at => 5.minutes.ago)
+      get :index, :format => 'atom'
+    end
+    should_respond_with :success
+    should "return ATOM format" do
+      assert_select 'feed' do
+        assert_select 'title', 'blog'
+        [@post1,@post2].each do |post|
+          assert_select 'entry' do
+            assert_select 'title', post.title
+          end
+        end
+      end
+    end
+    
+  end
+  
   context "on GET to show for a published post" do
     setup do
       @post = Factory(:post,:title => 'Title', :body => 'Body', :published => true)
